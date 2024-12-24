@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\AdvertResource;
 use App\Http\Resources\AuthorAdvertResource;
+use App\Jobs\SendAdModeratedInfo;
 use App\Models\Advert;
 use App\Repositories\AdvertRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -74,6 +75,12 @@ class AdvertService
         }
         if (!$advert) {
             throw new ModelNotFoundException("Advert with ID {$request->id} not found.");
+        }
+        $isActive = $advert->is_active;
+        $result = $this->advertRepository->update($request->except('_token'), $advert);
+        $advert->refresh();
+        if (!$isActive && $advert->is_active) {
+            SendAdModeratedInfo::dispatch($advert);
         }
 
         return response()->json($this->advertRepository->update($request->except('_token'), $advert));

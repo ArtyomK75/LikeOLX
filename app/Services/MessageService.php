@@ -4,16 +4,10 @@ namespace App\Services;
 
 use App\Http\Resources\DialogueResource;
 use App\Jobs\sendNewMessageInfo;
-use App\Mail\NewMessage;
-use App\Models\Advert;
-use App\Models\Dialogue;
 use App\Models\Message;
-use App\Models\User;
 use App\Repositories\MessageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class MessageService
 {
@@ -48,6 +42,6 @@ class MessageService
 
     private function sendMail(Message $message)
     {
-        sendNewMessageInfo::dispatch($message);
+        SendNewMessageInfo::dispatch($message);
     }
 }
