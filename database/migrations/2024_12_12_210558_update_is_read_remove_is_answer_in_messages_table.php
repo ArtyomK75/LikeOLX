@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        Schema::table('messages', function (Blueprint $table) {
+            $table->boolean('is_read')->default(false)->change();
+            $table->dropColumn('is_answer');
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('messages', function (Blueprint $table) {
+            $table->boolean('is_read')->default(null)->change();
+            $table->boolean('is_answer')->default(false);
+        });
+    }
+};
